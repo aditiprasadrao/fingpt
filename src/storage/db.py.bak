@@ -1,0 +1,51 @@
+# src/storage/db.py
+import os
+from sqlalchemy import create_engine, Table, Column, Integer, Float, String, MetaData, DateTime, select
+from sqlalchemy.sql import func
+from datetime import datetime
+
+# Use DATABASE_URL env var if present, otherwise sqlite file in project root
+DB_URL = os.getenv("DATABASE_URL", "sqlite:///./crypto.db")
+
+# For sqlite we need check_same_thread=False; for other DBs it's harmless to omit
+connect_args = {"check_same_thread": False} if DB_URL.startswith("sqlite") else {}
+
+engine = create_engine(DB_URL, connect_args=connect_args, echo=False)
+
+metadata = MetaData()
+
+tickers = Table(
+    "tickers", metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("symbol", String, index=True),
+    Column("price", Float),
+    Column("volume", Float, nullable=True),
+    Column("ts", DateTime(timezone=True), default=func.now())
+)
+
+# Create tables if they don't exist
+metadata.create_all(engine)
+
+
+def insert_ticker(symbol, price, volume=None, ts=None):
+    """Insert a ticker row into the tickers table."""
+    ts = ts or datetime.utcnow()
+    # Use a transaction - engine.begin() will commit or rollback automatically
+    with engine.begin() as conn:
+        conn.execute(
+            tickers.insert().values(symbol=symbol, price=price, volume=volume, ts=ts)
+        )
+
+
+def get_recent_aggregates(symbol="BTC-USD", limit=200):
+    """
+    Return recent ticker rows for `symbol` as a list of dicts (oldest -> newest).
+    """
+    stmt = select(tickers).where(tickers.c.symbol == symbol).order_by(tickers.c.ts.desc()).limit(limit)
+    with engine.connect() as conn:
+        res = conn.execute(stmt).all()
+
+    # SQLAlchemy Row objects are not directly convertible with dict(row)
+    # use row._mapping to get a mapping view, then dict().
+    rows = [dict(r._mapping) for r in res][::-1]  # reverse so oldest -> newest
+    return rows

@@ -1,0 +1,8 @@
+websocket-client
+streamlit
+pandas
+sqlalchemy
+psycopg2-binary   # only if using Postgres; skip if SQLite
+python-dotenv
+vaderSentiment
+praw
