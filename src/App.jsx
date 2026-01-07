@@ -9,6 +9,9 @@ import Watchlist from "./pages/Watchlist";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
+import Crypto from "./pages/Crypto";
+
+
 
 function App() {
   const theme = createTheme({
@@ -63,10 +66,14 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/*<Route path="/dashboard" element={<Dashboard />} />*/}
             <Route path="/coin/:id" element={<Coin />} />
             <Route path="/compare" element={<Compare />} />
             <Route path="/watchlist" element={<Watchlist />} />
+            <Route path="/btc" element={<Crypto symbol="BTC-USD" title="Bitcoin" />}/>
+            <Route path="/eth" element={<Crypto symbol="ETH-USD" title="Ethereum" />}/>
+            <Route path="/usdt" element={<Crypto symbol="USDT-USD" title="Tether" />}/>      
+
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
