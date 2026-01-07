@@ -1,29 +1,28 @@
 # fingpt
 
-⚙️ Environment Setup
+## Environment Setup
 
+Create a `.env` file in the project root and add:
+
+env
 REACT_APP_BACKEND_URL=https://viable-merrilee-electively.ngrok-free.dev
 
-⚠️ Note: The backend URL may change if ngrok is restarted.
+Note: The backend URL may change if ngrok is restarted.
 
-▶️ How to Run Locally
-
-Clone the repository
-
+How to Run Locally
+1. Clone the repository
+   
 git clone https://github.com/aditiprasadrao/fingpt.git
+
 cd fingpt
 
-
-Install dependencies
+3. Install dependencies
 
 npm install
 
-
-Start the development server
-
+5. Start the development server
+   
 npm start
 
-
-Open in browser:
-
+7. Open in browser
 http://localhost:3000
