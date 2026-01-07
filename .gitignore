@@ -1,1 +1,23 @@
+
 node_modules
+=======
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+venv311/
+
+# Local database files
+*.db
+*.db-journal
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
